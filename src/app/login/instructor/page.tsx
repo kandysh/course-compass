@@ -1,5 +1,5 @@
-import { AuthForm } from '@/components/auth/AuthForm';
+import { LoginForm } from '@/components/auth/LoginForm';
 
 export default function InstructorLoginPage() {
-  return <AuthForm formType="login" userType="instructor" />;
+  return <LoginForm userType="instructor" />;
 }

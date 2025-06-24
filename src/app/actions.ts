@@ -1,7 +1,8 @@
+
 "use server";
 import { cookies } from "next/headers";
 
-import type { AuthFormInput } from "@/components/auth/AuthForm";
+import type { AuthFormInput } from "@/lib/data";
 import {
   AUTH_COOKIE_NAME,
   AUTH_COOKIE_OPTIONS,

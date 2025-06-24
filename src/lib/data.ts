@@ -96,3 +96,12 @@ export interface ChatMessage {
   sentAt: string;
 }
 
+/**
+ * Represents the input for authentication forms.
+ */
+export interface AuthFormInput {
+  email: string;
+  password: string;
+  username?: string;
+  avatarUrl?: string | null;
+}

@@ -34,6 +34,7 @@ export const generateCourseThumbnailFlow = ai.defineFlow(
   },
   async (input) => {
     const { media } = await ai.generate({
+      model: "googleai/gemini-2.0-flash-preview-image-generation",
       prompt: `Generate a visually appealing and relevant thumbnail image for an online course titled "${input.courseName}". The image should be suitable for a course catalog, professional, and engaging for potential students. Avoid including any text directly in the image. Focus on creating a clear, high-quality graphic suitable for a course thumbnail. Output a single image.`,
       config: {
         responseModalities: ["TEXT", "IMAGE"],

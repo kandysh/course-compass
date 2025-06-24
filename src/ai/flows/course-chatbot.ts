@@ -42,7 +42,7 @@ export const courseChatbotFlow =  ai.defineFlow(
   },
   async input => {
     const {output} = await prompt(input);
-    if (!output || typeof output.answer !== 'string') {
+    if (!output?.answer) {
         throw new Error("AI failed to generate a valid answer.");
     }
     return output;

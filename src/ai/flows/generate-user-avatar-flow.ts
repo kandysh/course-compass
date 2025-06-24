@@ -37,6 +37,7 @@ export const generateUserAvatarFlow = ai.defineFlow(
   },
   async (input) => {
     const { media } = await ai.generate({
+      model: "googleai/gemini-2.0-flash-preview-image-generation",
       prompt: `Generate a unique, abstract, and professional avatar for a user named "${input.username}".
       The avatar should be suitable for a profile picture in an educational platform.
       It should be visually appealing and generic enough not to imply specific traits. Avoid including any text or letters directly in the image.

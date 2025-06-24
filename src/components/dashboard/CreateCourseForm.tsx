@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { useForm } from "react-hook-form";
+import { useForm, type FieldErrors } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import Image from "next/image";
@@ -111,7 +111,7 @@ export function CreateCourseForm({
     onOpenChange(false);
   };
 
-  const onFormError = (errors: any) => {
+  const onFormError = (errors: FieldErrors<CreateCourseFormData>) => {
     let errorMessage = "Please correct the errors in the form.";
     const firstErrorKey = Object.keys(errors)[0] as
       | keyof CreateCourseFormData

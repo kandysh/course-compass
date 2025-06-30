@@ -1,7 +1,6 @@
 "use client";
 import * as React from "react";
 import { useParams, useRouter } from "next/navigation";
-import { Header } from "@/components/layout/Header";
 import { CourseCard } from "@/components/dashboard/CourseCard";
 import { ChatbotClient } from "@/components/dashboard/ChatbotClient";
 import type { Course } from "@/lib/data";
@@ -214,22 +213,14 @@ export default function StudentDashboardPage() {
 
   if (isLoading || !loggedInUser) {
     return (
-      <div className="flex min-h-screen flex-col bg-muted/40">
-        <Header loggedInUser={null} />
-        <main className="flex-1 container py-8 flex items-center justify-center">
-          <Loader2 className="h-12 w-12 animate-spin text-primary" />
-        </main>
-      </div>
+      <main className="flex-1 container py-8 flex items-center justify-center">
+        <Loader2 className="h-12 w-12 animate-spin text-primary" />
+      </main>
     );
   }
 
   return (
     <div className="flex min-h-screen flex-col bg-muted/40">
-      <Header
-        loggedInUser={loggedInUser}
-        onChatbotToggle={toggleChatbot}
-        showChatbotButton={!!loggedInUser}
-      />
       <main className="flex-1 container py-8">
         <>
           <div className="mb-8 flex flex-col sm:flex-row items-center justify-between gap-4">

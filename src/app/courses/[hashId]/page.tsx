@@ -34,7 +34,6 @@ import {
   Medal,
   Trophy,
 } from "lucide-react";
-import { Header } from "@/components/layout/Header";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -160,57 +159,51 @@ export default function CourseDetailPage() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen flex-col">
-        <Header loggedInUser={sessionUser} />
-        <main className="flex-1 container py-8">
-          <Button
-            variant="outline"
-            onClick={() => router.back()}
-            className="mb-6"
-          >
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back
-          </Button>
-          <Card className="overflow-hidden shadow-lg">
-            <Skeleton className="h-64 w-full md:h-96" />
-            <CardHeader className="p-6">
-              <Skeleton className="h-8 w-3/4 mb-2" />
-              <Skeleton className="h-4 w-1/2 mb-4" />
-              <Skeleton className="h-6 w-1/4" />
-            </CardHeader>
-            <CardContent className="p-6">
-              <Skeleton className="h-4 w-full mb-2" />
-              <Skeleton className="h-4 w-full mb-2" />
-              <Skeleton className="h-4 w-3/4" />
-            </CardContent>
-            <CardFooter className="p-6 bg-muted/50 border-t">
-              <Skeleton className="h-4 w-1/4" />
-            </CardFooter>
-          </Card>
-        </main>
-      </div>
+      <main className="flex-1 container py-8">
+        <Button
+          variant="outline"
+          onClick={() => router.back()}
+          className="mb-6"
+        >
+          <ArrowLeft className="mr-2 h-4 w-4" />
+          Back
+        </Button>
+        <Card className="overflow-hidden shadow-lg">
+          <Skeleton className="h-64 w-full md:h-96" />
+          <CardHeader className="p-6">
+            <Skeleton className="h-8 w-3/4 mb-2" />
+            <Skeleton className="h-4 w-1/2 mb-4" />
+            <Skeleton className="h-6 w-1/4" />
+          </CardHeader>
+          <CardContent className="p-6">
+            <Skeleton className="h-4 w-full mb-2" />
+            <Skeleton className="h-4 w-full mb-2" />
+            <Skeleton className="h-4 w-3/4" />
+          </CardContent>
+          <CardFooter className="p-6 bg-muted/50 border-t">
+            <Skeleton className="h-4 w-1/4" />
+          </CardFooter>
+        </Card>
+      </main>
     );
   }
 
   if (!course) {
     return (
-      <div className="flex min-h-screen flex-col">
-        <Header loggedInUser={sessionUser} />
-        <main className="flex-1 container py-8 text-center">
-          <BookOpen className="mx-auto h-16 w-16 text-destructive mb-4" />
-          <h1 className="font-headline text-3xl font-bold mb-4">
-            Course Not Found
-          </h1>
-          <p className="text-muted-foreground mb-6">
-            Sorry, we couldn't find the course you were looking for or an error
-            occurred.
-          </p>
-          <Button onClick={() => router.back()}>
-            <ArrowLeft className="mr-2 h-5 w-5" />
-            Go Back
-          </Button>
-        </main>
-      </div>
+      <main className="flex-1 container py-8 text-center">
+        <BookOpen className="mx-auto h-16 w-16 text-destructive mb-4" />
+        <h1 className="font-headline text-3xl font-bold mb-4">
+          Course Not Found
+        </h1>
+        <p className="text-muted-foreground mb-6">
+          Sorry, we couldn't find the course you were looking for or an error
+          occurred.
+        </p>
+        <Button onClick={() => router.back()}>
+          <ArrowLeft className="mr-2 h-5 w-5" />
+          Go Back
+        </Button>
+      </main>
     );
   }
 
@@ -243,7 +236,6 @@ export default function CourseDetailPage() {
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
-      <Header loggedInUser={sessionUser} />
       <main className="flex-1 container py-8">
         <Button
           variant="outline"

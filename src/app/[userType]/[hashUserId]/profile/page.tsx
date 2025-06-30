@@ -10,7 +10,6 @@ import { useParams, useRouter } from 'next/navigation';
 import * as React from 'react';
 import { getUserDetailsById, getAuthenticatedUserSession } from '@/app/actions';
 import { Badge } from '@/components/ui/badge';
-import { Header } from '@/components/layout/Header';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -32,7 +31,7 @@ export default function UserProfilePage() {
   const hashUserIdFromParams = params.hashUserId as string;
 
   const [profileData, setProfileData] = React.useState<User | null>(null); 
-  const [loggedInUser, setLoggedInUser] = React.useState<UserSession | null>(null); 
+  const [sessionUser, setSessionUser] = React.useState<UserSession | null>(null); 
   const [isLoading, setIsLoading] = React.useState(true);
 
   React.useEffect(() => {
@@ -42,10 +41,10 @@ export default function UserProfilePage() {
      */
     async function fetchUserAndVerify() {
       setIsLoading(true);
-      const sessionUser = await getAuthenticatedUserSession();
-      setLoggedInUser(sessionUser);
+      const session = await getAuthenticatedUserSession();
+      setSessionUser(session);
 
-      if (!sessionUser) {
+      if (!session) {
         toast({ title: "Authentication Required", description: "Please log in.", variant: "destructive" });
         router.push('/');
         return;
@@ -55,25 +54,25 @@ export default function UserProfilePage() {
 
       if (decodedParamsUserId === null) {
         toast({ title: "Invalid User Identifier", description: "The user ID in the URL is invalid.", variant: "destructive" });
-        router.push(`/${sessionUser.role}/${encodeId(sessionUser.id)}/dashboard`); 
+        router.push(`/${session.role}/${encodeId(session.id)}/dashboard`); 
         return;
       }
 
-      if (decodedParamsUserId !== sessionUser.id || userTypeFromParams !== sessionUser.role) {
+      if (decodedParamsUserId !== session.id || userTypeFromParams !== session.role) {
          toast({ title: "Access Denied", description: "You can only view your own profile.", variant: "destructive" });
-         router.push(`/${sessionUser.role}/${encodeId(sessionUser.id)}/profile`); 
+         router.push(`/${session.role}/${encodeId(session.id)}/profile`); 
          return;
       }
 
       try {
         // Fetch details for the profile to be displayed (which is the logged-in user)
-        const userDetails = await getUserDetailsById(sessionUser.id); 
+        const userDetails = await getUserDetailsById(session.id); 
         if (userDetails) {
           setProfileData(userDetails);
         } else {
           setProfileData(null);
           toast({ title: "Profile Not Found", description: "Could not load your profile data.", variant: "destructive" });
-           router.push(`/${sessionUser.role}/${encodeId(sessionUser.id)}/dashboard`);
+           router.push(`/${session.role}/${encodeId(session.id)}/dashboard`);
         }
       } catch (error) {
         toast({ title: "Error Loading Profile", description: "Could not fetch profile details.", variant: "destructive" });
@@ -89,38 +88,32 @@ export default function UserProfilePage() {
    * Handles navigation back to the user's dashboard.
    */
   const handleBackToDashboard = () => {
-    if (loggedInUser?.id) {
-      router.push(`/${loggedInUser.role}/${encodeId(loggedInUser.id)}/dashboard`);
+    if (sessionUser?.id) {
+      router.push(`/${sessionUser.role}/${encodeId(sessionUser.id)}/dashboard`);
     } else {
       router.push('/');
     }
   };
 
-  if (isLoading || !loggedInUser) {
+  if (isLoading || !sessionUser) {
     return (
-      <div className="flex min-h-screen flex-col">
-        <Header loggedInUser={loggedInUser} />
-        <main className="flex-1 container py-8 flex items-center justify-center">
-          <Loader2 className="h-12 w-12 animate-spin text-primary" />
-        </main>
-      </div>
+      <main className="flex-1 container py-8 flex items-center justify-center">
+        <Loader2 className="h-12 w-12 animate-spin text-primary" />
+      </main>
     );
   }
   
   if (!profileData) {
     return (
-      <div className="flex min-h-screen flex-col">
-        <Header loggedInUser={loggedInUser} />
-        <main className="flex-1 container py-8 text-center">
-          <AlertTriangle className="mx-auto h-16 w-16 text-destructive mb-4" />
-          <h1 className="font-headline text-3xl font-bold mb-4">Profile Error</h1>
-          <p className="text-muted-foreground mb-6">Could not load your profile data or access was denied.</p>
-          <Button onClick={handleBackToDashboard}>
-            <ArrowLeft className="mr-2 h-5 w-5" />
-            Go Back to Your Dashboard
-          </Button>
-        </main>
-      </div>
+      <main className="flex-1 container py-8 text-center">
+        <AlertTriangle className="mx-auto h-16 w-16 text-destructive mb-4" />
+        <h1 className="font-headline text-3xl font-bold mb-4">Profile Error</h1>
+        <p className="text-muted-foreground mb-6">Could not load your profile data or access was denied.</p>
+        <Button onClick={handleBackToDashboard}>
+          <ArrowLeft className="mr-2 h-5 w-5" />
+          Go Back to Your Dashboard
+        </Button>
+      </main>
     );
   }
   
@@ -132,7 +125,6 @@ export default function UserProfilePage() {
 
   return (
     <div className="flex min-h-screen flex-col bg-muted/40">
-      <Header loggedInUser={loggedInUser} />
       <main className="flex-1 container py-8">
         <Button variant="outline" onClick={handleBackToDashboard} className="mb-8 text-sm">
           <ArrowLeft className="mr-2 h-4 w-4" />

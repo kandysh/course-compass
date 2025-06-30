@@ -8,7 +8,6 @@ const authRoutes = [
   "/instructor/login",
   "/student/signup",
   "/instructor/signup",
-  "/",
 ];
 
 const publicPaths = [

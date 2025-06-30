@@ -1,10 +1,15 @@
 "use client";
 
 import { LoginForm } from "@/components/auth/LoginForm";
-import { useParams } from "next/navigation";
+import { useParams, notFound } from "next/navigation";
 
-export default function InstructorLoginPage() {
+export default function LoginPage() {
   const params = useParams();
-  const userTypeFromParams = params.userType as "student" | "instructor";
-  return <LoginForm userType={userTypeFromParams} />;
+  const userType = params.userType as string;
+
+  if (userType !== "student" && userType !== "instructor") {
+    notFound();
+  }
+
+  return <LoginForm userType={userType} />;
 }

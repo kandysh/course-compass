@@ -1,10 +1,15 @@
 "use client";
 
 import { SignupForm } from "@/components/auth/SignupForm";
-import { useParams } from "next/navigation";
+import { useParams, notFound } from "next/navigation";
 
-export default function InstructorLoginPage() {
+export default function SignupPage() {
   const params = useParams();
-  const userTypeFromParams = params.userType as "student" | "instructor";
-  return <SignupForm userType={userTypeFromParams} />;
+  const userType = params.userType as string;
+
+  if (userType !== "student" && userType !== "instructor") {
+    notFound();
+  }
+
+  return <SignupForm userType={userType} />;
 }

@@ -11,6 +11,7 @@ const authRoutes = [
 ];
 
 const publicPaths = [
+  "/",
   "/api/",
   "/_next/",
   "/static/",

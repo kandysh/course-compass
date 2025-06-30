@@ -346,7 +346,7 @@ export function SignupForm({ userType }: SignupFormProps) {
           <p className="text-sm text-muted-foreground">
             Already have an account?{" "}
             <Link
-              href={`/login/${userType}`}
+              href={`/${userType}/login`}
               className="font-medium text-primary hover:underline"
             >
               Login

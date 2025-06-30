@@ -1,12 +1,11 @@
-
-'use client';
-import type { UserSession } from '@/lib/auth.config';
-import { encodeId } from '@/lib/hashids';
-import { LogOut, UserCircle } from 'lucide-react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation'; // Added
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
+"use client";
+import type { UserSession } from "@/lib/auth.config";
+import { encodeId } from "@/lib/hashids";
+import { LogOut, UserCircle } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,8 +14,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { logoutUser } from '@/app/actions'; // Added
+} from "@/components/ui/dropdown-menu";
+import { logoutUser } from "@/app/actions";
 
 /**
  * Props for the UserNav component.
@@ -34,18 +33,20 @@ interface UserNavProps {
  */
 export function UserNav({ user }: UserNavProps) {
   const router = useRouter(); // Added
-  const userName = user?.username || (user?.role === 'student' ? 'Student Guest' : 'Instructor Guest');
+  const userName =
+    user?.username ||
+    (user?.role === "student" ? "Student Guest" : "Instructor Guest");
   const userAvatarUrl = user?.avatarUrl ?? "https://placehold.co/40x40.png";
 
-  const initials = userName
-    .split(' ')
-    .map((n) => n[0])
-    .join('')
-    .toUpperCase() || (user?.role ? user.role.charAt(0).toUpperCase() : 'G');
+  const initials =
+    userName
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase() || (user?.role ? user.role.charAt(0).toUpperCase() : "G");
 
-  const profileLink = user?.id && user?.role 
-    ? `/${user.role}/${encodeId(user.id)}/profile`
-    : "#";
+  const profileLink =
+    user?.id && user?.role ? `/${user.role}/${encodeId(user.id)}/profile` : "#";
 
   /**
    * Handles the user logout process.
@@ -53,8 +54,8 @@ export function UserNav({ user }: UserNavProps) {
    */
   const handleLogout = async () => {
     await logoutUser();
-    router.push('/');
-    router.refresh(); // To ensure client-side state is cleared
+    router.push("/");
+    router.refresh();
   };
 
   return (
@@ -62,7 +63,13 @@ export function UserNav({ user }: UserNavProps) {
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-10 w-10 rounded-full">
           <Avatar className="h-10 w-10">
-            <AvatarImage src={userAvatarUrl} alt={userName} data-ai-hint={!user?.avatarUrl ? "placeholder avatar" : "profile avatar"}/>
+            <AvatarImage
+              src={userAvatarUrl}
+              alt={userName}
+              data-ai-hint={
+                !user?.avatarUrl ? "placeholder avatar" : "profile avatar"
+              }
+            />
             <AvatarFallback>{initials}</AvatarFallback>
           </Avatar>
         </Button>
@@ -78,14 +85,13 @@ export function UserNav({ user }: UserNavProps) {
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem asChild disabled={profileLink === "#"}>
-                <Link href={profileLink}> 
+                <Link href={profileLink}>
                   <UserCircle className="mr-2 h-4 w-4" />
                   <span>Profile</span>
                 </Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            {/* Modified Logout Item */}
             <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
               <LogOut className="mr-2 h-4 w-4" />
               <span>Log out</span>
@@ -120,4 +126,3 @@ export function UserNav({ user }: UserNavProps) {
     </DropdownMenu>
   );
 }
-

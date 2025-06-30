@@ -1,31 +1,40 @@
-
-import postgres from 'postgres';
+import postgres from "postgres";
 
 if (!process.env.POSTGRES_URL) {
   console.error(
-    'POSTGRES_URL environment variable is not set. Database operations will fail. ' +
-    'Please check your .env file and ensure your PostgreSQL server is running and accessible.'
+    "POSTGRES_URL environment variable is not set. Database operations will fail. " +
+      "Please check your .env file and ensure your PostgreSQL server is running and accessible.",
   );
   console.warn(
     "IMPORTANT: This update introduces a new database schema. If you have existing tables from the previous schema, " +
-    "they will NOT be automatically migrated. You will need to manually DROP old tables (users, courses, images, user_courses, user_sessions with old schema) " +
-    "for the new schema to be created correctly."
+      "they will NOT be automatically migrated. You will need to manually DROP old tables (users, courses, images, user_courses, user_sessions with old schema) " +
+      "for the new schema to be created correctly.",
   );
 }
 
-const sql = process.env.POSTGRES_URL ? postgres(process.env.POSTGRES_URL) : (()=>{
-  return new Proxy({}, {
-    get: (target, prop) => {
-      if (prop === 'then' || prop === 'catch' || prop === 'finally' || typeof prop === 'symbol') {
-        return undefined;
-      }
-      throw new Error(
-        'Database connection failed: POSTGRES_URL environment variable is not set or is invalid. ' +
-        'Please check your .env file and ensure your PostgreSQL server is running and accessible.'
-      );
-    }
-  }) as postgres.Sql;
-})();
+const sql = process.env.POSTGRES_URL
+  ? postgres(process.env.POSTGRES_URL)
+  : (() => {
+      return new Proxy(
+        {},
+        {
+          get: (target, prop) => {
+            if (
+              prop === "then" ||
+              prop === "catch" ||
+              prop === "finally" ||
+              typeof prop === "symbol"
+            ) {
+              return undefined;
+            }
+            throw new Error(
+              "Database connection failed: POSTGRES_URL environment variable is not set or is invalid. " +
+                "Please check your .env file and ensure your PostgreSQL server is running and accessible.",
+            );
+          },
+        },
+      ) as postgres.Sql;
+    })();
 
 /**
  * Ensures that all necessary database tables exist, creating them if they don't.
@@ -114,7 +123,7 @@ async function ensureTablesExist(dbClient: postgres.Sql) {
       );
     `;
 
-    // User Sessions Table (NEW SCHEMA)
+    // User Sessions Table
     await dbClient`
       CREATE TABLE IF NOT EXISTS user_sessions (
           id UUID PRIMARY KEY,
@@ -123,32 +132,34 @@ async function ensureTablesExist(dbClient: postgres.Sql) {
       );
     `;
     await dbClient`CREATE INDEX IF NOT EXISTS idx_user_sessions_expires_at ON user_sessions(expires_at);`;
-
   } catch (error: any) {
-    console.error('Error during table existence check or creation:', error.message);
+    console.error(
+      "Error during table existence check or creation:",
+      error.message,
+    );
     console.warn(
-        "An error occurred during database setup. This update introduces a new database schema. " +
+      "An error occurred during database setup. This update introduces a new database schema. " +
         "If you have existing tables from the previous schema (e.g., with different column structures or user_sessions table with old schema), " +
         "they will NOT be automatically migrated. " +
-        "You may need to manually DROP these old tables from your database for them to be recreated correctly with the new schema."
-      );
+        "You may need to manually DROP these old tables from your database for them to be recreated correctly with the new schema.",
+    );
   }
 }
 
 if (process.env.POSTGRES_URL) {
   (async () => {
     try {
-      await sql`SELECT 1`; // Test connection
+      await sql`SELECT 1`;
       await ensureTablesExist(sql);
     } catch (err: any) {
       console.error(
         "Failed to connect to the database for initial table check/creation. " +
-        "Ensure the database is accessible and the connection string is correct.",
-        err.message
+          "Ensure the database is accessible and the connection string is correct.",
+        err.message,
       );
-       console.warn(
+      console.warn(
         "IMPORTANT: This update introduces a new database schema. If you have existing tables from the previous schema, " +
-        "they will NOT be automatically migrated. You will need to manually DROP old tables for the new schema to be created correctly."
+          "they will NOT be automatically migrated. You will need to manually DROP old tables for the new schema to be created correctly.",
       );
     }
   })();

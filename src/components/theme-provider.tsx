@@ -1,9 +1,8 @@
+"use client";
 
-'use client';
+import * as React from "react";
 
-import * as React from 'react';
-
-type Theme = 'dark' | 'light';
+type Theme = "dark" | "light";
 
 interface ThemeProviderProps {
   children: React.ReactNode;
@@ -17,7 +16,9 @@ interface ThemeProviderState {
   toggleTheme: () => void;
 }
 
-const ThemeProviderContext = React.createContext<ThemeProviderState | undefined>(undefined);
+const ThemeProviderContext = React.createContext<
+  ThemeProviderState | undefined
+>(undefined);
 
 /**
  * Provides theme management (dark/light) for the application.
@@ -28,13 +29,13 @@ const ThemeProviderContext = React.createContext<ThemeProviderState | undefined>
  */
 export function ThemeProvider({
   children,
-  initialTheme = 'dark', // Defaulting to dark to match previous state
-  storageKey = 'course-compass-theme',
+  initialTheme = "dark", // Defaulting to dark to match previous state
+  storageKey = "course-compass-theme",
 }: ThemeProviderProps): JSX.Element {
   const [theme, setThemeState] = React.useState<Theme>(() => {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       const storedTheme = localStorage.getItem(storageKey) as Theme | null;
-      if (storedTheme && (storedTheme === 'light' || storedTheme === 'dark')) {
+      if (storedTheme && (storedTheme === "light" || storedTheme === "dark")) {
         return storedTheme;
       }
     }
@@ -42,13 +43,11 @@ export function ThemeProvider({
   });
 
   React.useEffect(() => {
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
 
     const root = window.document.documentElement;
-    // Remove the opposite theme class and add the current theme class
-    root.classList.remove(theme === 'dark' ? 'light' : 'dark');
+    root.classList.remove(theme === "dark" ? "light" : "dark");
     root.classList.add(theme);
-    // Save the current theme to localStorage
     localStorage.setItem(storageKey, theme);
   }, [theme, storageKey]);
 
@@ -57,7 +56,7 @@ export function ThemeProvider({
   };
 
   const toggleTheme = () => {
-    setThemeState((prevTheme) => (prevTheme === 'light' ? 'dark' : 'light'));
+    setThemeState((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
   };
 
   const value = {
@@ -82,7 +81,7 @@ export function ThemeProvider({
 export const useTheme = (): ThemeProviderState => {
   const context = React.useContext(ThemeProviderContext);
   if (context === undefined) {
-    throw new Error('useTheme must be used within a ThemeProvider');
+    throw new Error("useTheme must be used within a ThemeProvider");
   }
   return context;
 };

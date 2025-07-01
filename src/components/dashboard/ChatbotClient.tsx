@@ -305,7 +305,7 @@ export function ChatbotClient({
                 </Avatar>
               )}
               <div
-                className={`max-w-[70%] rounded-xl px-4 py-3 shadow break-words ${
+                className={`max-w-[70%] rounded-xl px-4 py-3 shadow break-all ${
                   message.sender === "student"
                     ? "bg-primary text-primary-foreground"
                     : "bg-card text-card-foreground"

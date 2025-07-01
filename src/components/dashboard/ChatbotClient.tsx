@@ -305,13 +305,13 @@ export function ChatbotClient({
                 </Avatar>
               )}
               <div
-                className={`max-w-[70%] rounded-xl px-4 py-3 shadow break-all ${
+                className={`min-w-0 max-w-[70%] rounded-xl px-4 py-3 shadow ${
                   message.sender === "student"
                     ? "bg-primary text-primary-foreground"
                     : "bg-card text-card-foreground"
                 }`}
               >
-                <div className="prose prose-sm dark:prose-invert max-w-none prose-p:my-1 prose-pre:my-1.5">
+                <div className="prose prose-sm dark:prose-invert max-w-none prose-p:my-1 prose-pre:my-1.5 break-words">
                   {renderMessageContent(message.text)}
                 </div>
                 <p
